@@ -1,6 +1,6 @@
-#Primeiro Projeto para Fundamentos NODE.JS
+# Primeiro Projeto para Fundamentos NODE.JS
 
-##Criando package.json com 
+## Criando package.json com 
 ```js
  npm init -y  
 ```
@@ -27,7 +27,7 @@ npm run dev
 ```
 A configuração "type": "module" é justamente para conseguir importar a biblioteca node http no código a seguir ao gerar arquivo server.js.
 
-##Código de importação e  criação Servidor
+## Código de importação e  criação Servidor
 ```js
 import http from 'node:http'
 
