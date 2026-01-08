@@ -44,24 +44,24 @@ server.listen(3333)
 
 Quando temos uma aplicação ela usa rotas para seguintes Métodos:
 
-- Criar usuários
-- Listagem de usuários
-- Edição de usuários
-- Remoção de usuários
+- Criar usuários\
+- Listagem de usuários\
+- Edição de usuários\
+- Remoção de usuários\
 
 Algo fundamentaç para qualquer API é entender como funciona método HTTP que é composta de dois principais recursos:
 
-- Método HTTP
-- URL 
+- Método HTTP\
+- URL \
 
 Temos mais recursos mas de inicio iremos falar apenas destes.
 
 Quando estamos consumindo nosso backend fazendo uma requisição iremos obter as duas informações  através de req.
 
-como pode observar nessa linha:
- const {method, url} = req 
-Ou
-const method = req.method
+como pode observar nessa linha:\
+ const {method, url} = req \
+Ou\
+const method = req.method\
 
 Iremos usar uma sintaxe mais pratica, se chama desestruturação , ou seja, quando usamos const {method, url} = req , estamos indicando que vamos usar method, url que esta dentro de req.
 
@@ -85,18 +85,18 @@ No console retornara NO TERMINAL um GET/ por padrão e / foi endereço acessado 
 
 ### Dentro do HTTP temos varios métodos os mais comuns que serão usados são:
 
-GET    ==> Buscar um recurso do backend
-POST   ==> Criar um recurso no backend
-PUT    ==> Atualizar um recurso no backend (Atualizar conjunto de dados de uma entidade )
-PATCH  ==> Atualizar uma informação especifica de um recurso do backend (Atualizar um dado especifico)
-DELETE ==> Deletar um recurso do backend
+GET    ==> Buscar um recurso do backend\
+POST   ==> Criar um recurso no backend\
+PUT    ==> Atualizar um recurso no backend (Atualizar conjunto de dados de uma entidade )\
+PATCH  ==> Atualizar uma informação especifica de um recurso do backend (Atualizar um dado especifico)\
+DELETE ==> Deletar um recurso do backend\
 
 As rotas serão diferenciadas pela soma do método mais a URL
 
 Ex:
 
-GET/USERS  ==> Buscando recurso no meu backend
-POST/USERS ==> Criando usuário no meu backend
+GET/USERS  ==> Buscando recurso no meu backend\
+POST/USERS ==> Criando usuário no meu backend\
 
 server.js
 ```js
