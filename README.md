@@ -44,22 +44,22 @@ server.listen(3333)
 
 Quando temos uma aplicação ela usa rotas para seguintes Métodos:
 
-- Criar usuários\
-- Listagem de usuários\
-- Edição de usuários\
-- Remoção de usuários\
+- Criar usuários
+- Listagem de usuários
+- Edição de usuários
+- Remoção de usuários
 
 Algo fundamentaç para qualquer API é entender como funciona método HTTP que é composta de dois principais recursos:
 
-- Método HTTP\
-- URL \
+- Método HTTP
+- URL 
 
 Temos mais recursos mas de inicio iremos falar apenas destes.
 
 Quando estamos consumindo nosso backend fazendo uma requisição iremos obter as duas informações  através de req.
 
-como pode observar nessa linha:\
- const {method, url} = req \
+como pode observar nessa linha:
+ const {method, url} = req 
 Ou\
 const method = req.method\
 
@@ -89,7 +89,7 @@ GET    ==> Buscar um recurso do backend\
 POST   ==> Criar um recurso no backend\
 PUT    ==> Atualizar um recurso no backend (Atualizar conjunto de dados de uma entidade )\
 PATCH  ==> Atualizar uma informação especifica de um recurso do backend (Atualizar um dado especifico)\
-DELETE ==> Deletar um recurso do backend\
+DELETE ==> Deletar um recurso do backend
 
 As rotas serão diferenciadas pela soma do método mais a URL
 
