@@ -169,7 +169,7 @@ Execute comando para iniciar servidor NODE
 ```bash
 npm run dev
 ```
-Divida terminal e insira comando para navegarmos na rota POST de criação do usuário
+Divída terminal e insira comando para navegarmos na rota POST de criação do usuário
 ```bash
 http POST localhost:3333/users
 ```
