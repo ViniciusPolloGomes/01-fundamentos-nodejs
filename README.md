@@ -203,7 +203,7 @@ Muito comum o uso para transitar dados e estrutura de dados em texto , iremos ac
 JSON.stringify(users)
 ```
 
-Ao vberificar método GET no console teremos esse retorno esperado:
+Ao verificar método GET no console teremos esse retorno esperado:
 
 ```bash
 PS C:\Users\vinic\Documents\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs>   http GET localhost:3333/users
