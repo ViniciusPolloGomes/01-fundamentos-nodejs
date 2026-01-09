@@ -134,16 +134,158 @@ No javascript tem algo que se chama "early return" ou seja nada do que tiver aba
 
 Caso nenhuma rota ou if seja verdadeira ela irá executar nossa rota de escape que seria Hello world.
 
+## Salvando usuários em memória Headers
+
+### Stateful 
+
+conceito que se refere a uma aplicação que armazena dados em memória
+
+### Stateless
+
+conceito que se refere a uma aplicação que armazena dados em Banco de dados 
+
+Voltando ao tema de salvar usuários iremos criar um Array[]
+```js
+const users = []
+```
+
+No método POST iremos criar uma lista com o usuário Jonh Doe e seu email, lembrando que usamos {} na sintaxe para que seja criado como objeto.
+```js
+users.push({
+   id:1,
+   name:'Jonh Doe',
+   email:'jonhdoe@example.com'
+})
+```
+
+No metodo GET retornamos a lista de usuários!
+
+```js
+return res.end(users)
+```
+
+Execute comando para iniciar servidor NODE
+
+```bash
+npm run dev
+```
+Divida terminal e insira comando para navegarmos na rota POST de criação do usuário
+```bash
+http POST localhost:3333/users
+```
+teremos seguinte resultado no terminal
+
+```bash
+PS C:\Users\vinic\Documents\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-funhttp POST localhost:3333/users
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 22
+Date: Fri, 09 Jan 2026 00:37:43 GMT
+Keep-Alive: timeout=5
+
+Criação de usuários
+```
+Agora execute o comando:
+
+```bash
+http GET localhost:3333/users
+```
+
+Teremos um erro pois front-end não recebe os dados em array de objeto contendo diferentes tipos de variaveis como string, int, sendo assim iremos corrigir isso da seguinte forma: 
+
+Pode ser enviado como texto(string) , Buffer , Uint8Array  ambos são usados para serviços de stream , e para converter esse Array[] em string iremos usar um recurso conhecido.
+
+### JSON - Javascript Object Notation
+
+Muito comum o uso para transitar dados e estrutura de dados em texto , iremos acrescentar no método GET o código:
+
+```js
+JSON.stringify(users)
+```
+
+Ao vberificar método GET no console teremos esse retorno esperado:
+
+```bash
+PS C:\Users\vinic\Documents\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs>   http GET localhost:3333/users
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 58
+Date: Fri, 09 Jan 2026 00:58:16 GMT
+Keep-Alive: timeout=5
+
+[{"id":1,"name":"Jonh Doe","email":"jonhdoe@example.com"}]
+```
+
+Note que linha contendo o JSON esta sem estrutura sem identação como um texto em uma linha só, por isso iremos corrigir essa apresentação adicionando código:
+
+Nessa situação que entra os Cabeçalhos tanto na resposta como na requisição fazendo com que front-end entenda que é um arquivo JSON, ou seja , são metadados , informações adicionais de como que esse dado pode ser interpretado pelo front-end
+
+Após a res adicionamos a linha que ira definir que retorno é em json para front-end interpretar e exibir conforme.
+```js
+if(method==='GET' && url ==='/users'){
+     return res
+         .setHeader('Content-type','application/json ')
+         .end(JSON.stringify(users))
+}
+ ```
+Access-Control-Allow-Headers
+
+O cabeçalho de resposta Access-Control-Allow-Headers é usado na resposta à uma preflight request na qual incluí o cabeçalho Access-Control-Request-Headers para indicar quais cabeçalhos HTTP podem ser utilizados durante a requisição efetiva.
+HTTP headers - MDN Web Docs - Mozilla
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers
+https://developer.mozilla.org/en-US/docs/Web/API/Headers#browser_compatibility
+
+Agora que temos documentação iremos aprender sobre  .setHeader('Content-type','application/json ') , basicamente informamos que queremos definir um tipo de conteúdo do tipo JSON , coletamos esse cabeçalho definido como JSON na função setHeader.
 
 
 
+server.js
+```js
+import http from 'node:http'
 
+const users = []
+const server = http.createServer((req, res)=>{
+    const {method, url} = req
 
+    //early return ou seja nada do que tiver abaixo do retun será executado , por isso não usamos else
+    if(method==='GET' && url ==='/users'){
+        return res
+            .setHeader('Content-type','application/json ')
+            .end(JSON.stringify(users))
+    }
 
+    if(method==='POST' && url ==='/users'){
+        users.push({
+            id:1,
+            name:'Jonh Doe',
+            email:'jonhdoe@example.com'
+        })
+        return res.end('Criação de usuários')
+    }
+    return res.end('Hello ignite')
 
+})
 
+server.listen(3333)
+```
+Resposta esperada do método GET no front-end:
 
+```bash
+PS C:\Users\vinic\Documents\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs>   http GET localhost:3333/users 
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 58
+Content-type: application/json
+Date: Fri, 09 Jan 2026 01:25:40 GMT
+Keep-Alive: timeout=5
 
+[
+    {
+        "email": "jonhdoe@example.com",
+        "id": 1,
+        "name": "Jonh Doe"
+    }
+]
+```
 
-
-
+Note que agora a resposta do método GET no console esta estruturada e identada fornecendo uma melhor visibilidade e entendimento dos dados, essa implementação é importante para organização, facilidade compriensão, praticidade.
