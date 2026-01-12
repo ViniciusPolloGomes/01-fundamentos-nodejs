@@ -1,6 +1,6 @@
-# Primeiro Projeto para Fundamentos NODE.JS
+# 1 Primeiro Projeto para Fundamentos NODE.JS
 
-## Criando package.json com 
+##  1.1 Iniciando com NODE.JS Criando package.json com 
 ```js
  npm init -y  
 ```
@@ -27,7 +27,7 @@ npm run dev
 ```
 A configuração "type": "module" é justamente para conseguir importar a biblioteca node http no código a seguir ao gerar arquivo server.js.
 
-## Código de importação e  criação Servidor
+## 1.2 Código de importação e  criação Servidor
 ```js
 import http from 'node:http'
 
@@ -38,9 +38,9 @@ const server = http.createServer((req, res)=>{
 })
 server.listen(3333) 
 ```
-# Estrutura da Aplicação
+# 2 Estrutura da Aplicação
 
-## Rotas de criação e listagem (Métodos HTTP)
+## 2.1 Rotas de criação e listagem (Métodos HTTP)
 
 Quando temos uma aplicação ela usa rotas para seguintes Métodos:
 
@@ -96,7 +96,7 @@ As rotas serão diferenciadas pela soma do método mais a URL
 Ex:
 
 GET/USERS  ==> Buscando recurso no meu backend\
-POST/USERS ==> Criando usuário no meu backend\
+POST/USERS ==> Criando usuário no meu backend
 
 server.js
 ```js
@@ -134,13 +134,13 @@ No javascript tem algo que se chama "early return" ou seja nada do que tiver aba
 
 Caso nenhuma rota ou if seja verdadeira ela irá executar nossa rota de escape que seria Hello world.
 
-## Salvando usuários em memória Headers
+## 2.2 Salvando usuários em memória Headers
 
-### Stateful 
+### 2.2.1 Stateful 
 
 conceito que se refere a uma aplicação que armazena dados em memória
 
-### Stateless
+### 2.2.2Stateless
 
 conceito que se refere a uma aplicação que armazena dados em Banco de dados 
 
@@ -289,3 +289,94 @@ Keep-Alive: timeout=5
 ```
 
 Note que agora a resposta do método GET no console esta estruturada e identada fornecendo uma melhor visibilidade e entendimento dos dados, essa implementação é importante para organização, facilidade compriensão, praticidade.
+
+## 3 Conhecendo HTTP status code
+
+HTTP status code é um dado que informa o resultado de uma requisição ou resposta , por padrão esses dados são numericos seguidos de 3 digitos, geralmente sendo concluido positivamente ou negativamente como por exemplo um erro, usamos esse conceito para diferenciar os erros e o sucesso dos métodos HTTP
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+
+Os códigos de status de resposta HTTP indicam se uma solicitação HTTP específica foi concluída com sucesso. As respostas são agrupadas em cinco classes:
+
+Respostas informativas ( 100– 199) status informativos\
+Respostas bem-sucedidas ( 200– 299) status de sucesso\
+Mensagens de redirecionamento ( 300– 399) status que indica que a rota não foi encontrada e redirecionada\
+Respostas de erro do cliente ( 400– 499) status que indica ERROS originados por causa da requisição que foi feita pelo back-end (client error, erros gerados devido cliente informar algo errado)\ 
+Respostas de erro do servidor ( 500– 599) Erros inesperados , relacionado a back-end
+
+Para mais detalhes acesse link.
+
+
+```js
+if(method==='POST' && url ==='/users'){
+        users.push({
+            id:1,
+            name:'Jonh Doe',
+            email:'jonhdoe@example.com'
+        })
+        return res.writeHead(201).end()
+}
+```
+Na linha do código a seguir  writeHead informa o tipo de erro que sera enviado como texto em end na resposta que sera retornada sinalizando que deu certo.
+
+```js
+ return res.writeHead(201).end()
+````
+
+No console tivemos retorno da requisição POST 
+
+```bash
+PS C:\Users\vinic\Documents\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs>         http POST localhost:3333/users
+HTTP/1.1 201 Created
+Connection: keep-alive
+Date: Mon, 12 Jan 2026 23:36:25 GMT
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+```
+
+Tivemos sucesso indicado aqui:
+
+```js 
+HTTP/1.1 201 Created
+```
+
+Caso nenhum dos métodos forem verdadeiros teremos que devolver um erro ao inves de Hello World.
+
+```js
+return res.writeHead(404).end()
+```
+No final dessa aula teremos o arquivo server.js no seguinte estado:
+
+Server.js
+```js
+import http from 'node:http'
+
+const users = []
+const server = http.createServer((req, res)=>{
+    const {method, url} = req
+
+    //early return ou seja nada do que tiver abaixo do retun será executado , por isso não usamos else
+    if(method==='GET' && url ==='/users'){
+        return res
+            .setHeader('Content-type','application/json ')
+            .end(JSON.stringify(users))
+    }
+
+    if(method==='POST' && url ==='/users'){
+        users.push({
+            id:1,
+            name:'Jonh Doe',
+            email:'jonhdoe@example.com'
+        })
+        return res.writeHead(201).end()
+    }
+    return res.writeHead(404).end()
+
+})
+
+server.listen(3333)
+```
+
+
+
+
