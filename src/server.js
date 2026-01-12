@@ -17,7 +17,7 @@ const server = http.createServer((req, res)=>{
             name:'Jonh Doe',
             email:'jonhdoe@example.com'
         })
-        return res.end('Criação de usuários')
+        return res.writeHead(201).end()
     }
     return res.end('Hello ignite')
 
