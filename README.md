@@ -140,7 +140,7 @@ Caso nenhuma rota ou if seja verdadeira ela irá executar nossa rota de escape q
 
 conceito que se refere a uma aplicação que armazena dados em memória
 
-### 2.2.2Stateless
+### 2.2.2 Stateless
 
 conceito que se refere a uma aplicação que armazena dados em Banco de dados 
 
