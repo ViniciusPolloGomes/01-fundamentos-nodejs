@@ -290,11 +290,10 @@ Keep-Alive: timeout=5
 
 Note que agora a resposta do método GET no console esta estruturada e identada fornecendo uma melhor visibilidade e entendimento dos dados, essa implementação é importante para organização, facilidade compriensão, praticidade.
 
-<<<<<<< HEAD
+
 ## 2.3 Conhecendo HTTP status code
-=======
+
 ## 3 Conhecendo HTTP status code
->>>>>>> 9b60b4de6f9fb9f130cef8af10eb32eca3aac0b7
 
 HTTP status code é um dado que informa o resultado de uma requisição ou resposta , por padrão esses dados são numericos seguidos de 3 digitos, geralmente sendo concluido positivamente ou negativamente como por exemplo um erro, usamos esse conceito para diferenciar os erros e o sucesso dos métodos HTTP
 
@@ -381,7 +380,6 @@ const server = http.createServer((req, res)=>{
 server.listen(3333)
 ```
 
-<<<<<<< HEAD
 # 3 Streams no Node.js
 
 ## 3.1 Entendento streams no Node.js
