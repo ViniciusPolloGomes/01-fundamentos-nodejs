@@ -1,6 +1,6 @@
-# Primeiro Projeto para Fundamentos NODE.JS
+# 1 Primeiro Projeto para Fundamentos NODE.JS
 
-## Criando package.json com 
+##  1.1 Iniciando com NODE.JS Criando package.json com 
 ```js
  npm init -y  
 ```
@@ -27,7 +27,7 @@ npm run dev
 ```
 A configuração "type": "module" é justamente para conseguir importar a biblioteca node http no código a seguir ao gerar arquivo server.js.
 
-## Código de importação e  criação Servidor
+## 1.2 Código de importação e  criação Servidor
 ```js
 import http from 'node:http'
 
@@ -38,9 +38,9 @@ const server = http.createServer((req, res)=>{
 })
 server.listen(3333) 
 ```
-# Estrutura da Aplicação
+# 2 Estrutura da Aplicação
 
-## Rotas de criação e listagem (Métodos HTTP)
+## 2.1 Rotas de criação e listagem (Métodos HTTP)
 
 Quando temos uma aplicação ela usa rotas para seguintes Métodos:
 
@@ -96,7 +96,7 @@ As rotas serão diferenciadas pela soma do método mais a URL
 Ex:
 
 GET/USERS  ==> Buscando recurso no meu backend\
-POST/USERS ==> Criando usuário no meu backend\
+POST/USERS ==> Criando usuário no meu backend
 
 server.js
 ```js
@@ -134,13 +134,13 @@ No javascript tem algo que se chama "early return" ou seja nada do que tiver aba
 
 Caso nenhuma rota ou if seja verdadeira ela irá executar nossa rota de escape que seria Hello world.
 
-## Salvando usuários em memória Headers
+## 2.2 Salvando usuários em memória Headers
 
-### Stateful 
+### 2.2.1 Stateful 
 
 conceito que se refere a uma aplicação que armazena dados em memória
 
-### Stateless
+### 2.2.2 Stateless
 
 conceito que se refere a uma aplicação que armazena dados em Banco de dados 
 
@@ -195,7 +195,7 @@ Teremos um erro pois front-end não recebe os dados em array de objeto contendo 
 
 Pode ser enviado como texto(string) , Buffer , Uint8Array  ambos são usados para serviços de stream , e para converter esse Array[] em string iremos usar um recurso conhecido.
 
-### JSON - Javascript Object Notation
+### 2.2.3 JSON - Javascript Object Notation
 
 Muito comum o uso para transitar dados e estrutura de dados em texto , iremos acrescentar no método GET o código:
 
@@ -289,3 +289,263 @@ Keep-Alive: timeout=5
 ```
 
 Note que agora a resposta do método GET no console esta estruturada e identada fornecendo uma melhor visibilidade e entendimento dos dados, essa implementação é importante para organização, facilidade compriensão, praticidade.
+
+## 2.3 Conhecendo HTTP status code
+
+HTTP status code é um dado que informa o resultado de uma requisição ou resposta , por padrão esses dados são numericos seguidos de 3 digitos, geralmente sendo concluido positivamente ou negativamente como por exemplo um erro, usamos esse conceito para diferenciar os erros e o sucesso dos métodos HTTP
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+
+Os códigos de status de resposta HTTP indicam se uma solicitação HTTP específica foi concluída com sucesso. As respostas são agrupadas em cinco classes:
+
+Respostas informativas ( 100– 199) status informativos\
+Respostas bem-sucedidas ( 200– 299) status de sucesso\
+Mensagens de redirecionamento ( 300– 399) status que indica que a rota não foi encontrada e redirecionada\
+Respostas de erro do cliente ( 400– 499) status que indica ERROS originados por causa da requisição que foi feita pelo back-end (client error, erros gerados devido cliente informar algo errado)\ 
+Respostas de erro do servidor ( 500– 599) Erros inesperados , relacionado a back-end
+
+Para mais detalhes acesse link.
+
+
+```js
+if(method==='POST' && url ==='/users'){
+        users.push({
+            id:1,
+            name:'Jonh Doe',
+            email:'jonhdoe@example.com'
+        })
+        return res.writeHead(201).end()
+}
+```
+Na linha do código a seguir  writeHead informa o tipo de erro que sera enviado como texto em end na resposta que sera retornada sinalizando que deu certo.
+
+```js
+ return res.writeHead(201).end()
+````
+
+No console tivemos retorno da requisição POST 
+
+```bash
+PS C:\Users\vinic\Documents\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs>         http POST localhost:3333/users
+HTTP/1.1 201 Created
+Connection: keep-alive
+Date: Mon, 12 Jan 2026 23:36:25 GMT
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+```
+
+Tivemos sucesso indicado aqui:
+
+```js 
+HTTP/1.1 201 Created
+```
+
+Caso nenhum dos métodos forem verdadeiros teremos que devolver um erro ao inves de Hello World.
+
+```js
+return res.writeHead(404).end()
+```
+No final dessa aula teremos o arquivo server.js no seguinte estado:
+
+Server.js
+```js
+import http from 'node:http'
+
+const users = []
+const server = http.createServer((req, res)=>{
+    const {method, url} = req
+
+    //early return ou seja nada do que tiver abaixo do retun será executado , por isso não usamos else
+    if(method==='GET' && url ==='/users'){
+        return res
+            .setHeader('Content-type','application/json ')
+            .end(JSON.stringify(users))
+    }
+
+    if(method==='POST' && url ==='/users'){
+        users.push({
+            id:1,
+            name:'Jonh Doe',
+            email:'jonhdoe@example.com'
+        })
+        return res.writeHead(201).end()
+    }
+    return res.writeHead(404).end()
+
+})
+
+server.listen(3333)
+```
+
+# 3 Streams no Node.js
+
+## 3.1 Entendento streams no Node.js
+
+Grandes fatores do Node.js ter destaque foi conceito de Streams no qual resolvia problemas da epoca com performance.
+
+Basicamente Streams é metodo que node faz para trabalhar com recebimento e envio de dados e a sua reprodução em tela,
+
+Um grande exemplo é assistir filmes netflix o video ele vem por partes e cada parte ja é reproduzida em tela sem que precise carregar todo o arquivo para depois executar. Nesse exemplo o video vem por partes e ja é reproduzido evitando demora ou esperas deixando aplicação com mais fluides. Sabendo usar esse conceito conseguimos gerir como essa transferencia de informação sera feita.
+Isso se aplica principalmente para transferencias volumosas em termos de tamanho.
+
+Conceito de stream os dados vem fracionados , são lidos , processados e reproduzidos por partes.
+
+### 3.1.1 Readable Streams
+No caso onde o usuário esta fazendo um upload de arquivo e nosso back-end esta lendo aos poucos estamos usando conceito de Readable Streams
+
+### 3.1.2 Writeable Streams
+No caso da Netflix onde estamos enviando os dados por streams para nosso front-end aos poucos estamos usando conceito de Writeable Streams.
+
+## 3.2  Criando Stream de leitura
+
+No node toda prota de entrada e saida é automaticamente uma stream.
+
+As propriedades  "req" "res" do nosso código HTTP são stream tendo opção de devolver ou fazer a leitura aos poucos.
+
+### 3.2.1 Variaveis de conexão da Stream
+
+```js
+process.stdin.pipe(process.stdout)
+```
+
+Process é uma variavel do Node.js cheia de recursos, um deles é stdin que é uma propriedade que retorna uma stream conectada ao proprio stdin que representa o que usuário digita no terminal em resumo é uma readable.read() , .pipe é uma função que representa algo do tipo um encanamento no literal portugues(Outra forma de entender é usando a palavra encaminhar). O que é muito comum no node é conectar essas streams
+
+stdin é uma duplex stream , mas isso será falado em outro tópico.
+
+Streams --> Streams
+
+Ou seja, teremos a stream que faz a leitura aos poucos  e enviaremos de forma conectada para stream que ira tratar esses dados aos poucos.
+
+Dessa maneira usaremos o Process.stdout que é retorno da aplicação no terminal.
+
+Ou seja tudo que enviar no terminal ele retornara.
+
+Com a aplicação em execução no console digitei comando:
+
+```bash
+node streams/fundamentals.js
+```
+
+Ao digitar ola tive seguinte resultado:
+
+```bash
+PS C:\Users\vinic\Documents\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs> node streams/fundamentals.js
+ola
+ola
+```
+
+Recebemos a string "ola" em forma de stream de leitura conectando com a stream de gravação mostramos em tela.
+
+### stdin stream de leitura!
+
+### stdout stream de gravação!
+
+### 3.2.2 Como construir Streams do zero
+
+```js
+
+import {Readable} from 'node:stream'
+
+class OneToHundredStream extends Readable{
+    index = 1
+
+    _read(){
+        const i = this.index++
+
+        if(i > 100){
+            this.push(null)
+        }else{
+            this.push(i)
+        }
+    }
+}
+
+new OneToHundredStream().pipe(process.stdout)
+
+```
+Explicando código:
+
+No código a seguir importamos  Readable da biblioteca node/stream
+
+-Criamos uma classe chamada fluxo de um a cem, que recebe a herança de Readable, ou seja tera as mesmas caracteristicas mais o que você implementar.
+
+-Por ser uma herança agora temos a função _read que fara a leitura da stream nesse exemplo criamos um dado primitivo que se refere a um numero inteiro.
+
+-fizemos uma condição que i sempre sera ele mais ele mesmo a cada vez que função for executada.
+
+- fizemos um if para tornar nulo caso passar de 100.
+
+- fizemos um else para  adiciona um ou mais elementos ao final de um array, modificando o array original e retornando o novo comprimento (tamanho) do array por meio da função push(i)
+
+Se tentarmos executar esse código dara erro por que streams não entende tipo de dado primitivo, devemos usar buffer.
+
+Então faremos alteração em nosso código:
+
+```js
+import {Readable} from 'node:stream'
+
+class OneToHundredStream extends Readable{
+    index = 1
+
+    _read(){
+        const i = this.index++
+
+        if(i > 100){
+            this.push(null)
+        }else{
+            const buf = Buffer.from(String(i))
+
+            this.push(buf)
+        }
+    }
+}
+
+new OneToHundredStream().pipe(process.stdout)
+
+```
+
+Basicamente tranformamos i em uma string no qual é um array de 1 a 100 e retornamos ele para console quando chega no 100.
+
+```bash
+PS C:\Users\vinic\Documents\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs> node streams/fundamentals.js
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
+```
+
+Para nosso código ficar mais interassante vamos colocar if dentro da função setTimeOut(), isso fara exibir os dados por partes na medida que recebemos enviaremos , ou seja para cada leitura mesmo que não temos todo dado completo reproduziremos em tela lendo e gravando e exibindo.
+
+```js
+    setTimeout(()=>{
+            if(i > 100){
+                this.push(null)
+            }else{
+                const buf = Buffer.from(String(i))
+
+                this.push(buf)
+            }
+    },1000)
+```
+A cara 1000 milisegundos, ou seja, 1 segundo ocorrera a leitura por stream conectando a gravação e exibição para usuário.
+
+```js
+import {Readable} from 'node:stream'
+
+class OneToHundredStream extends Readable{
+    index = 1
+
+    _read(){
+        const i = this.index++
+
+        setTimeout(()=>{
+             if(i > 100){
+            this.push(null)
+            }else{
+                const buf = Buffer.from(String(i))
+
+                this.push(buf)
+            }
+        },1000)
+    }
+}
+
+new OneToHundredStream().pipe(process.stdout)
+```

@@ -19,7 +19,7 @@ const server = http.createServer((req, res)=>{
         })
         return res.writeHead(201).end()
     }
-    return res.end('Hello ignite')
+    return res.writeHead(404).end()
 
 })
 
