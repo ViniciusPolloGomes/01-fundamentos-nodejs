@@ -403,7 +403,7 @@ No caso da Netflix onde estamos enviando os dados por streams para nosso front-e
 
 ## 3.2  Criando Stream de leitura
 
-No node toda prota de entrada e saida é automaticamente uma stream.
+No node toda porta de entrada e saida é automaticamente uma stream.
 
 As propriedades  "req" "res" do nosso código HTTP são stream tendo opção de devolver ou fazer a leitura aos poucos.
 
