@@ -554,8 +554,4 @@ class OneToHundredStream extends Readable{
 
 new OneToHundredStream().pipe(process.stdout)
 ```
-=======
-
-
-
->>>>>>> 9b60b4de6f9fb9f130cef8af10eb32eca3aac0b7
+//feito
