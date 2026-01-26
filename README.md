@@ -552,4 +552,65 @@ class OneToHundredStream extends Readable{
 
 new OneToHundredStream().pipe(process.stdout)
 ```
+## 3.3 Criando Stream de escrita e transformação
 
+### 3.3.1 Stream Writable
+
+Importamos a propriedade Writable no qual se refere a stream de escrita.
+
+Criamos uma classe que representa a stream de gravação chamada   MultiplyByTenStream.
+
+```js
+class MultiplyByTenStream extends Writable{
+    _write(chunk, encoding, callback){
+        console.log(Number(chunk.toString())*10)
+        callback()
+    }
+}
+```
+
+Como pode observar criamos a stream de gravação MultiplyByTenStream , ela recebe herança da propriedade Writable, ou seja, tera as funções e as variaveis de Writable mais as que inventarmos.
+Dentro do código usamos a função _write no qual responsável pela escrita, sendo uma função ela necessita de critérios para funcionar,
+São 3 os critérios, podemos chamar de parametros, variaveis que serão necessárias e usadas para funcionar a função.
+
+Chunk é a parte atual que lemos no stream de leitura 
+
+encoding é como que essa informação esta codificada , veremos futuramente mais detalhes.
+
+callback é uma funçao que a stream precisa chamar quando ela terminou de fazer o que ela precisava fazer com aquela informação.
+
+Processaremos o dado e exibiremos no concole.log basicamente estamos multiplicando por 10 , aquela fração de informação que é chunk , convertendo em texto, e depois convertendo em numero.
+Finalizando chamando a função callback
+
+### 3.3.2 Stream Transform
+
+A Stream de transformação consiste em receber os dados onde efetuamos a leitura e para cada fração de informação enviada na variavel chunk faremos algum tipo de processo ou alteração, nesse exemplo tranformaremos o numero em negativo.
+Usamos uma constante para armazenar o dado e devolvemos na callback no formato Buffer.
+
+```js
+class InverseNumberStream extends Transform{
+    _transform(chunk,encoding, callback){
+        const Transformed = Number(chunk.toString()) * -1
+
+        callback(null, Buffer.from(String(Transformed)))
+    }
+}
+```
+
+Logo a sequencia fica:
+
+```js
+new OneToHundredStream().pipe(new InverseNumberStream()).pipe(new MultiplyByTenStream())
+ ```
+
+ Como pode observar a transform ficou entre a de leitura e gravação. ambas conectadas
+
+ Existe a stream DUPLEX , ela pode conter tanto leitura como gravação.
+
+ ## 3.4 Aplicando Stream no Modulo HTTP 
+
+ Esse projeto trata-se de um exemplo que não será aplicado no mundo real , estamos no primeiro projeto aprendendo conceitos basicos, mais para frente vamos usar casos mais reais.
+
+ Vamos criar um Servidor HTTP para dar continuidade.
+
+ 
