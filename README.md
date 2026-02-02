@@ -659,7 +659,7 @@ Servidor vai retornar a InverseNumberStream que esta conectada e transformando a
  ```
 
 
-´´´bash
+```bash
 PS C:\Users\vinic\OneDrive\Documentos\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs> node streams/stream-http-server.js        
 -1
 -2
@@ -671,7 +671,7 @@ PS C:\Users\vinic\OneDrive\Documentos\Rocketseat\Curso Node.js\Criando Projeto N
 -8
 -9
 -10
-´´´
+```
 
 porém falta o outro arquivo que vamos implementar.
 
