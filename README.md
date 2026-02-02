@@ -613,4 +613,100 @@ new OneToHundredStream().pipe(new InverseNumberStream()).pipe(new MultiplyByTenS
 
  Vamos criar um Servidor HTTP para dar continuidade.
 
- 
+ Vamos Criar um arquivo chamado stream-http-server.js
+
+ Nesse arquivo sera um servidor
+
+ ```js
+ import http from 'node:http'
+
+import { Transform } from 'node:stream'
+
+class InverseNumberStream extends Transform{
+    _transform(chunk,encoding, callback){
+        const transformed = Number(chunk.toString()) * -1
+
+        console.log(transformed )
+
+        callback(null, Buffer.from(String(transformed)))
+    }
+}
+
+const server = http.createServer((req,res)=>{
+    return req.pipe(new InverseNumberStream()).pipe(res)
+})
+
+server.listen(3334)
+```
+
+Importamos http 
+Importamos Transform
+
+Criamos a classe InverseNumberStream herdando as caracteristicas e comportamentos de Transform, sendo assim essa classe possui toda estrutura de uma stream de transoformação contendo a função _transform , seguida das variaveis chunk , ecoding, e função callback.
+
+Criamos uma constante que esta armazenando chunk como numero porém transformando para negativo por meio da multiplicação de numero negativo, ou seja, retornara um numero negativo.
+
+Apenas um processo simples de dado para cara fração de dado que estamos lendo sendo processado, esse processo estamos tornando negativo no exemplo.
+
+Depois usamos a função callback com primeiro parametro null, lembrando que esse parametro pode ser um erro ou mensagem de erro, e devolvemos o numero negativo dentro do Buffer.
+
+Esse servidor sendo criado, quando iniciamos esse servidor no terminal
+
+Servidor vai retornar a InverseNumberStream que esta conectada e transformando a variavel de stream res :
+
+```js 
+ return req.pipe(new InverseNumberStream()).pipe(res)
+ ```
+
+
+´´´bash
+PS C:\Users\vinic\OneDrive\Documentos\Rocketseat\Curso Node.js\Criando Projeto Nodejs 1\01-fundamentos-nodejs> node streams/stream-http-server.js        
+-1
+-2
+-3
+-4
+-5
+-6
+-7
+-8
+-9
+-10
+´´´
+
+porém falta o outro arquivo que vamos implementar.
+
+fake-upload-to-http-stream.js
+
+```js
+import {Readable} from 'node:stream'
+
+class OneToHundredStream extends Readable{
+    index = 1
+
+    _read(){
+        const i = this.index++
+
+        setTimeout(()=>{
+             if(i > 100){
+            this.push(null)
+            }else{
+                const buf = Buffer.from(String(i))
+
+                this.push(buf)
+            }
+        },1000)
+    }
+}
+
+await fetch('http://localhost:3334',{
+    method: 'POST',
+    body: new OneToHundredStream(),
+    duplex: 'half',
+    headers: {
+    'Content-Type': 'application/json'
+  },
+})
+```
+Esse arquivo representa nosso front-end abrindo uma conexão com back-end sem fechar e enviando dados aos poucos para backend processando e retornando para front-end, tudo por meio da função fetch e sua estrutura basica obrigatoria, como é POST enviando uma informação por padrão enviamos a função no corpo da requisição  body: new OneToHundredStream(), por padrão  duplex: 'half',  method: 'POST',headers: 'Content-Type': 'application/json' é mais para retorno ficar em uma estrutura reconhecida como json.
+
+Exemplo basico mostrando conceito de stream .
