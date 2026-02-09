@@ -710,3 +710,85 @@ await fetch('http://localhost:3334',{
 Esse arquivo representa nosso front-end abrindo uma conexão com back-end sem fechar e enviando dados aos poucos para backend processando e retornando para front-end, tudo por meio da função fetch e sua estrutura basica obrigatoria, como é POST enviando uma informação por padrão enviamos a função no corpo da requisição  body: new OneToHundredStream(), por padrão  duplex: 'half',  method: 'POST',headers: 'Content-Type': 'application/json' é mais para retorno ficar em uma estrutura reconhecida como json.
 
 Exemplo basico mostrando conceito de stream .
+
+## 3.5 Consumindo a stream completa
+
+Método onde consumimos toda stream, ou seja, carregamos todos dados para usarmos conforme a necessidade.
+
+Arquivo use-stream-complete.js
+
+```js
+
+import http from 'node:http'
+
+const server = http.createServer(async(req, res)=>{
+   const buffers =[] 
+  
+    for await (const chunk of req){
+        buffers.push(chunk)
+    }
+
+    constfullStreamContent = Buffer.concat(buffers).toString()          
+
+    console.log(constfullStreamContent)
+
+    return res.end(constfullStreamContent)
+
+})
+
+server.listen(3334)
+```
+Nosso servidor tem uma função assincrona async que contem parametros requisição e resposta por padrão elas são stream,
+fizemos uma constante buffers que armazena os valores de um array.
+Fizemos um laço de repetição em loop que ele não executa os codigos posteriores enquanto não finalizar o await.
+
+await recebe chunk como constante of para percorrer  conteudo da requisição,sendo assim dentro da função temos buffers que recebe os dados , push sempre armazena no final do array, chunk fração de dado que sera armazenada em buffers por ultimo.
+Após percorrer toda requisição ele irá concatenar  constfullStreamContent = Buffer.concat(buffers).toString()   cada fração em string.
+Exibiremos no consolog e retornaremos ao front-end   return res.end(constfullStreamContent)
+
+no fake-upload-to-http-stream-complete.js
+
+```js
+import {Readable} from 'node:stream'
+
+class OneToHundredStream extends Readable{
+    index = 1
+
+    _read(){
+        const i = this.index++
+
+        setTimeout(()=>{
+             if(i > 5){
+            this.push(null)
+            }else{
+                const buf = Buffer.from(String(i))
+
+                this.push(buf)
+            }
+        },1000)
+    }
+}
+
+await fetch('http://localhost:3334',{
+    method: 'POST',
+    body: new OneToHundredStream(),
+    duplex: 'half',
+    headers: {
+    'Content-Type': 'application/json'
+  },
+}).then(response =>{
+     return response.text()
+}).then(data =>{ 
+    console.log(data)
+})
+```
+
+Função .then ela usa resultado de fetch para  transformar , processar de alguma forma, e tratar erros com exceções por meio da função catch.
+
+```js
+fetch('https://api.exemplo.com/dados')
+  .then(response => response.json()) // 1º then: transforma em JSON
+  .then(data => console.log(data))   // 2º then: usa os dados
+  .catch(error => console.error(error)); // Trata erros da cadeia
+
+```
