@@ -792,3 +792,4 @@ fetch('https://api.exemplo.com/dados')
   .catch(error => console.error(error)); // Trata erros da cadeia
 
 ```
+

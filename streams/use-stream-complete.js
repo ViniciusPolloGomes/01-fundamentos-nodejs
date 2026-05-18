@@ -6,7 +6,7 @@ const server = http.createServer(async(req, res)=>{
     for await (const chunk of req){
         buffers.push(chunk)
     }
-    constfullStreamContent = Buffer.concat(buffers).toString()          
+    const fullStreamContent = Buffer.concat(buffers).toString()          
 
     console.log(constfullStreamContent)
 
