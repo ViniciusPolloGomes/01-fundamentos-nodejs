@@ -16,4 +16,4 @@ const server = http.createServer((req,res)=>{
     return req.pipe(new InverseNumberStream()).pipe(res)
 })
 
-server.listen(3334)
+server.listen(3333)
