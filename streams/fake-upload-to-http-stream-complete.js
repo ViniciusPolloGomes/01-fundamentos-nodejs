@@ -18,15 +18,15 @@ class OneToHundredStream extends Readable{
     }
 }
 
-// await fetch('http://localhost:3333',{
-  //  method: 'POST',
-    //body: new OneToHundredStream(),
-    //duplex: 'half',
-    //headers: {
-    //'Content-Type': 'application/json'
-  //},
-//}).then(response =>{
-     //return response.text()
-//}).then(data =>{ 
-    //console.log(data)
-//})
+await fetch('http://localhost:3333',{
+    method: 'POST',
+    body: new OneToHundredStream(),
+    duplex: 'half',
+    headers: {
+    'Content-Type': 'application/json'
+  },
+}).then(response =>{
+     return response.text()
+}).then(data =>{ 
+    console.log(data)
+})
