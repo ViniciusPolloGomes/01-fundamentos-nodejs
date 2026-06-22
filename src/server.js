@@ -1,6 +1,8 @@
 import http from 'node:http'
 import { json } from './middlewares/json.js'
 
+const database = new Database()
+
 const users = []
 const server = http.createServer(async(req, res)=>{
     const {method, url} = req
@@ -9,6 +11,8 @@ const server = http.createServer(async(req, res)=>{
     
     //early return ou seja nada do que tiver abaixo do retun será executado , por isso não usamos else
     if(method==='GET' && url ==='/users'){
+        const users = database.select('users')
+
         return res
             .setHeader('Content-type','application/json ')
             .end(JSON.stringify(users))
@@ -16,11 +20,13 @@ const server = http.createServer(async(req, res)=>{
 
     if(method==='POST' && url ==='/users'){
         const {name ,email} = req.body 
-        users.push({
+        const user={
             id:1,
             name,
             email,
-        })
+        }
+
+        database.insert('users', user)
         return res.writeHead(201).end()
     }
     return res.writeHead(404).end()

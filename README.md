@@ -793,3 +793,76 @@ fetch('https://api.exemplo.com/dados')
 
 ```
 
+# 4 Criando banco de dados ficticio em arquivo( isso pode ser aproveitado como cookies futuramente vale apena aprender)
+
+## 4.1 Criando banco de dados em arquivo
+
+Criamos arquivo database.js sempre que nossa aplição reiniciar buscara informações no arquivo 
+
+```js
+export class Database{
+    #database={ }
+
+    select(table){
+        const data = this.#database[table] ?? []
+        
+        return data
+    }
+
+    insert(table, data){
+
+        if(Array.isArray((this.#database[table]))){
+            this.#database[table].push(data)
+        }else{
+            this.#database[table] = [data]
+        }
+
+        return data;
+    }
+}
+```
+
+Versão com perssistencia de dados no arquivo
+
+```js
+import fs from 'node:fs/promises'
+
+const databasePath = new URL('../db.json', import.meta.url)  
+
+export class Database{
+    #database={ }
+
+    constructor(){
+        fs.writeFile(databasePath,'utf8').
+        then(data=>{
+            this.#database = JSON.parse(data)
+        })
+        .catch(()=>{
+            this.#persist()
+        })
+    }
+
+    #persist(){
+         fs.writeFile('db.json', JSON.stringify(this.#satabase))
+    }
+
+    select(table){
+        const data = this.#database[table] ?? []
+        
+        return data
+    }
+
+    insert(table, data){
+
+        if(Array.isArray((this.#database[table]))){
+            this.#database[table].push(data)
+        }else{
+            this.#database[table] = [data]
+        }
+
+        this.#persist();
+
+        return data;
+    }
+}
+```
